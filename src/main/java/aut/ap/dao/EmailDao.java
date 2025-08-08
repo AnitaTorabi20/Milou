@@ -4,6 +4,7 @@ import aut.ap.entity.Email;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import aut.ap.util.HibernateUtil;
 
 import java.util.List;
 
@@ -103,4 +104,19 @@ public class EmailDao {
             return count != null && count > 0;
         }
     }
+
+    public List<Email> searchEmails(String keyword, String userEmail) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM Email e " +
+                    "WHERE (e.subject LIKE :keyword OR e.body LIKE :keyword) " +
+                    "AND (e.sender = :userEmail OR e.recipient = :userEmail) " +
+                    "ORDER BY e.sent_time DESC";
+
+            return session.createQuery(hql, Email.class)
+                    .setParameter("keyword", "%" + keyword + "%")
+                    .setParameter("userEmail", userEmail)
+                    .getResultList();
+        }
+    }
+
 }

@@ -55,4 +55,16 @@ public class Email {
 
     public boolean isRead() { return isRead; }
     public void setRead(boolean isRead) { this.isRead = isRead; }
+
+    @Override
+    public String toString() {
+        return "Email Details:\n" +
+                "Code: " + code + "\n" +
+                "Sender: " + sender + "\n" +
+                "Recipient(s): " + recipient + "\n" +
+                "Subject: " + subject + "\n" +
+                "Date: " + sent_time + "\n" +
+                "Body:\n" + body + "\n";
+    }
+
 }

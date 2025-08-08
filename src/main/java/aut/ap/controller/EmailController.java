@@ -6,6 +6,7 @@ import aut.ap.service.EmailService;
 import aut.ap.util.HibernateUtil;
 import org.hibernate.Session;
 
+
 import java.util.*;
 
 public class EmailController {
@@ -294,6 +295,22 @@ public class EmailController {
             }
         } catch (Exception ex) {
             System.out.println("Failed to forward email: " + ex.getMessage());
+        }
+    }
+
+    public void searchEmails(String userEmail) {
+        System.out.print("Enter keyword to search in subject or body: ");
+        String keyword = scanner.nextLine().trim();
+
+        List<Email> results = emailService.searchEmails(keyword, userEmail);
+
+        if (results.isEmpty()) {
+            System.out.println("No emails found with the given keyword.");
+        } else {
+            System.out.println("Found " + results.size() + " email(s):");
+            for (Email email : results) {
+                System.out.println(email);
+            }
         }
     }
 }

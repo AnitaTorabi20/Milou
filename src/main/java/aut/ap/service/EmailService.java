@@ -85,4 +85,8 @@ public class EmailService {
     public List<Email> getEmailsBySubjectAndSender(String subject, String sender) {
         return emailDao.getEmailsBySubjectAndSender(subject, sender);
     }
+
+    public List<Email> searchEmails(String keyword, String userEmail) {
+        return emailDao.searchEmails(keyword, userEmail);
+    }
 }
