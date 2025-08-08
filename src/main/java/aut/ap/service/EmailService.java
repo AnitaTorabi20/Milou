@@ -97,7 +97,7 @@ public class EmailService {
     public boolean changeReadStatus(String code, String userEmail) {
         Email email = emailDao.getEmailByCodeIfAuthorized(code, userEmail);
         if (email == null) {
-            return false; // ایمیل پیدا نشد یا دسترسی نیست
+            return false;
         }
         email.changeRead();
         emailDao.updateEmail(email);
