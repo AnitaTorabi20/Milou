@@ -93,4 +93,15 @@ public class EmailService {
     public void deleteEmail(Email email) {
         emailDao.deleteEmail(email);
     }
+
+    public boolean changeReadStatus(String code, String userEmail) {
+        Email email = emailDao.getEmailByCodeIfAuthorized(code, userEmail);
+        if (email == null) {
+            return false; // ایمیل پیدا نشد یا دسترسی نیست
+        }
+        email.changeRead();
+        emailDao.updateEmail(email);
+        return true;
+    }
+
 }

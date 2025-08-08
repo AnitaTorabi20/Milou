@@ -56,6 +56,10 @@ public class Email {
     public boolean isRead() { return isRead; }
     public void setRead(boolean isRead) { this.isRead = isRead; }
 
+    public void changeRead() {
+        this.isRead = !this.isRead;
+    }
+
     @Override
     public String toString() {
         return "Email Details:\n" +

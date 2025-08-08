@@ -131,4 +131,13 @@ public class EmailDao {
         }
     }
 
+    public void updateEmail(Email email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.update(email);
+            tx.commit();
+        }
+    }
+
+
 }

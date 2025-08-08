@@ -328,4 +328,17 @@ public class EmailController {
         System.out.println("Email deleted successfully.");
     }
 
+    public void changeReadStatus(String userEmail) {
+        System.out.print("Enter email code to change read/unread status: ");
+        String code = scanner.nextLine().trim();
+
+        boolean success = emailService.changeReadStatus(code, userEmail);
+        if (success) {
+            System.out.println("Email read/unread status changed successfully.");
+        } else {
+            System.out.println("Email not found or access denied.");
+        }
+    }
+
+
 }

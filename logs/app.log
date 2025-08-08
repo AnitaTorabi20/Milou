@@ -216,3 +216,15 @@
 	Minimum pool size: 1
 	Maximum pool size: 20
 [01:14:43] [INFO] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+[01:26:52] [INFO] org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.13.Final
+[01:26:53] [INFO] org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+[01:26:53] [WARN] org.hibernate.orm.connections.pooling - HHH10001002: Using built-in connection pool (not intended for production use)
+[01:26:54] [INFO] org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/milou]
+	Database driver: com.mysql.cj.jdbc.Driver
+	Database version: 8.0.42
+	Autocommit mode: false
+	Isolation level: undefined/unknown
+	Minimum pool size: 1
+	Maximum pool size: 20
+[01:26:57] [INFO] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
