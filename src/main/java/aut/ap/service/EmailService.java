@@ -89,4 +89,8 @@ public class EmailService {
     public List<Email> searchEmails(String keyword, String userEmail) {
         return emailDao.searchEmails(keyword, userEmail);
     }
+
+    public void deleteEmail(Email email) {
+        emailDao.deleteEmail(email);
+    }
 }

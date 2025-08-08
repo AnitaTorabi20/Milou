@@ -313,4 +313,19 @@ public class EmailController {
             }
         }
     }
+
+    public void deleteEmail(String userEmail) {
+        System.out.print("Enter email code to delete: ");
+        String code = scanner.nextLine().trim();
+
+        Email email = emailService.getEmailByCodeIfAuthorized(code, userEmail);
+        if (email == null) {
+            System.out.println("Email not found or you don't have permission to delete it.");
+            return;
+        }
+
+        emailService.deleteEmail(email);
+        System.out.println("Email deleted successfully.");
+    }
+
 }
