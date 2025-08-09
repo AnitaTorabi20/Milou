@@ -82,6 +82,10 @@ public class EmailService {
         return emailDao.getEmailByCodeIfAuthorized(code, userEmail);
     }
 
+    public Email getEmailByCodeIfAuthorizedIncludeDeleted(String code, String userEmail) {
+        return emailDao.getEmailByCodeIfAuthorizedIncludeDeleted(code, userEmail);
+    }
+
     public List<Email> getEmailsBySubjectAndSender(String subject, String sender) {
         return emailDao.getEmailsBySubjectAndSender(subject, sender);
     }
@@ -102,6 +106,20 @@ public class EmailService {
         email.changeRead();
         emailDao.updateEmail(email);
         return true;
+    }
+
+    public void softDeleteEmail(Email email) {
+        email.setDeleted(true);
+        emailDao.updateEmail(email);
+    }
+
+    public void restoreEmail(Email email) {
+        email.setDeleted(false);
+        emailDao.updateEmail(email);
+    }
+
+    public List<Email> getDeletedEmails(String userEmail) {
+        return emailDao.getDeletedEmails(userEmail);
     }
 
 }

@@ -60,6 +60,16 @@ public class Email {
         this.isRead = !this.isRead;
     }
 
+    private boolean deleted = false;
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Email Details:\n" +

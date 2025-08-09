@@ -23,6 +23,7 @@ create table email (
     code varchar(20),
     IsRead boolean default 0,
     recipient varchar(255),
+    deleted boolean default false,
     foreign key (sender_id) references user(id) on delete cascade,
     foreign key (folder_id) references folder(id) on delete set null
 );

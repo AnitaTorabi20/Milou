@@ -35,7 +35,7 @@ public class EmailDao {
 
     public List<Email> getUnreadEmails(String recipient) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Email WHERE recipient = :recipient AND isRead = false ORDER BY sent_time DESC", Email.class)
+            return session.createQuery("FROM Email WHERE recipient = :recipient AND isRead = false AND deleted = false ORDER BY sent_time DESC", Email.class)
                     .setParameter("recipient", recipient)
                     .list();
         }
@@ -44,7 +44,7 @@ public class EmailDao {
     public List<Email> getAllEmails(String userEmail) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
-                            "FROM Email WHERE recipient = :email ORDER BY sent_time DESC",
+                            "FROM Email WHERE recipient = :email AND deleted = false ORDER BY sent_time DESC",
                             Email.class
                     )
                     .setParameter("email", userEmail)
@@ -54,7 +54,7 @@ public class EmailDao {
 
     public Email getEmailByCode(String code) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Email WHERE code = :code", Email.class)
+            return session.createQuery("FROM Email WHERE code = :code AND deleted = false", Email.class)
                     .setParameter("code", code)
                     .uniqueResult();
         }
@@ -71,7 +71,7 @@ public class EmailDao {
 
     public List<Email> getSentEmails(String senderEmail) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Email e WHERE e.sender = :senderEmail ORDER BY e.sent_time DESC", Email.class)
+            return session.createQuery("FROM Email e WHERE e.sender = :senderEmail AND e.deleted = false ORDER BY e.sent_time DESC", Email.class)
                     .setParameter("senderEmail", senderEmail)
                     .list();
         }
@@ -79,16 +79,28 @@ public class EmailDao {
 
     public Email getEmailByCodeIfAuthorized(String code, String userEmail) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Email e WHERE e.code = :code AND (e.recipient = :userEmail OR e.sender = :userEmail)", Email.class)
+            return session.createQuery("FROM Email e WHERE e.code = :code AND e.deleted = false AND (e.recipient = :userEmail OR e.sender = :userEmail)", Email.class)
                     .setParameter("code", code)
                     .setParameter("userEmail", userEmail)
                     .uniqueResult();
         }
     }
 
+    public Email getEmailByCodeIfAuthorizedIncludeDeleted(String code, String userEmail) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(
+                            "FROM Email e WHERE e.code = :code AND (e.recipient = :userEmail OR e.sender = :userEmail)",
+                            Email.class)
+                    .setParameter("code", code)
+                    .setParameter("userEmail", userEmail)
+                    .uniqueResult();
+        }
+    }
+
+
     public List<Email> getEmailsBySubjectAndSender(String subject, String sender) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Email e WHERE e.subject = :subject AND e.sender = :sender", Email.class)
+            return session.createQuery("FROM Email e WHERE e.subject = :subject AND e.sender = :sender AND e.deleted = false", Email.class)
                     .setParameter("subject", subject)
                     .setParameter("sender", sender)
                     .list();
@@ -110,6 +122,7 @@ public class EmailDao {
             String hql = "FROM Email e " +
                     "WHERE (e.subject LIKE :keyword OR e.body LIKE :keyword) " +
                     "AND (e.sender = :userEmail OR e.recipient = :userEmail) " +
+                    "AND e.deleted = false" +
                     "ORDER BY e.sent_time DESC";
 
             return session.createQuery(hql, Email.class)
@@ -138,4 +151,14 @@ public class EmailDao {
             tx.commit();
         }
     }
+
+    public List<Email> getDeletedEmails(String userEmail) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM Email e WHERE e.deleted = true AND (e.sender = :userEmail OR e.recipient = :userEmail) ORDER BY e.sent_time DESC";
+            return session.createQuery(hql, Email.class)
+                    .setParameter("userEmail", userEmail)
+                    .getResultList();
+        }
+    }
+
 }

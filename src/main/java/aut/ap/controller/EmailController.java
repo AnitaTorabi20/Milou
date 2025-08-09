@@ -319,13 +319,12 @@ public class EmailController {
         String code = scanner.nextLine().trim();
 
         Email email = emailService.getEmailByCodeIfAuthorized(code, userEmail);
-        if (email == null) {
-            System.out.println("Email not found or you don't have permission to delete it.");
-            return;
+        if (email != null && !email.isDeleted()) {
+            emailService.softDeleteEmail(email);
+            System.out.println("Email moved to Trash.");
+        } else {
+            System.out.println("Email not found or already deleted.");
         }
-
-        emailService.deleteEmail(email);
-        System.out.println("Email deleted successfully.");
     }
 
     public void changeReadStatus(String userEmail) {
@@ -339,6 +338,76 @@ public class EmailController {
             System.out.println("Email not found or access denied.");
         }
     }
+
+//    public void viewTrash(String userEmail) {
+//        List<Email> deletedEmails = emailService.getDeletedEmails(userEmail);
+//        if (deletedEmails.isEmpty()) {
+//            System.out.println("Trash is empty.");
+//        } else {
+//            System.out.println("Trash emails:");
+//            for (Email email : deletedEmails) {
+//                System.out.println(email);
+//            }
+//        }
+//    }
+
+    public void restoreEmail(String userEmail) {
+        System.out.print("Enter email code to restore: ");
+        String code = scanner.nextLine().trim();
+
+        Email email = emailService.getEmailByCodeIfAuthorizedIncludeDeleted(code, userEmail);
+        if (email != null && email.isDeleted()) {
+            emailService.restoreEmail(email);
+            System.out.println("Email restored from Trash.");
+        } else {
+            System.out.println("Email not found or not deleted.");
+        }
+    }
+
+    public void showTrashMenu(String userEmail) {
+        List<Email> deletedEmails = emailService.getDeletedEmails(userEmail);
+        if (deletedEmails.isEmpty()) {
+            System.out.println("Trash is empty.");
+        } else {
+            System.out.println("Trash emails:");
+            for (Email email : deletedEmails) {
+                System.out.println(email);
+            }
+        }
+
+        while (true) {
+            System.out.println("\nAvailable commands: [Re]store, [PD] Permanently Delete, [B]ack");
+            System.out.print("Enter command: ");
+            String cmd = scanner.nextLine().trim().toUpperCase();
+
+            switch (cmd) {
+                case "RE":
+                    restoreEmail(userEmail);
+                    break;
+                case "PD":
+                    permanentlyDeleteEmail(userEmail);
+                    break;
+                case "B":
+                    return;
+                default:
+                    System.out.println("Invalid command.");
+            }
+        }
+    }
+
+    public void permanentlyDeleteEmail(String userEmail) {
+        System.out.print("Enter email code to permanently delete: ");
+        String code = scanner.nextLine().trim();
+        Email email = emailService.getEmailByCodeIfAuthorizedIncludeDeleted(code, userEmail);
+        if (email != null && email.isDeleted()) {
+            emailService.deleteEmail(email);
+            System.out.println("Email permanently deleted.");
+        } else {
+            System.out.println("Email not found or not in Trash.");
+        }
+    }
+
+
 
 
 }

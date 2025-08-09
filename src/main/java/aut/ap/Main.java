@@ -47,7 +47,7 @@ public class Main {
                 boolean loggedIn = true;
                 while (loggedIn) {
                     System.out.println("\nAvailable Commands:");
-                    System.out.println("[S]end, [V]iew, [R]eply, [F]orward, [Se]arch,[Ch]ange read status, [D]elete, [Q]uit:");
+                    System.out.println("[S]end, [V]iew, [R]eply, [F]orward, [Se]arch, [Ch]ange read status, [D]elete, [T]rash, [Q]uit:");
 
                     String cmd = scanner.nextLine().trim();
 
@@ -68,10 +68,15 @@ public class Main {
                             emailController.searchEmails(loggedInUser.getEmail());
                             break;
                         case "D":
-                            emailController.deleteEmail(loggedInUser.getEmail());
+                            emailController.deleteEmail(loggedInUser.getEmail() );
                             break;
                         case "CH":
                             emailController.changeReadStatus(loggedInUser.getEmail());
+                        case "T":
+                            emailController.showTrashMenu(loggedInUser.getEmail());
+                            break;
+                        case "RE":
+                            emailController.restoreEmail(loggedInUser.getEmail());
                             break;
                         case "Q":
                             System.out.println("Logging out...");
