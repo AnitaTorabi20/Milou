@@ -339,18 +339,6 @@ public class EmailController {
         }
     }
 
-//    public void viewTrash(String userEmail) {
-//        List<Email> deletedEmails = emailService.getDeletedEmails(userEmail);
-//        if (deletedEmails.isEmpty()) {
-//            System.out.println("Trash is empty.");
-//        } else {
-//            System.out.println("Trash emails:");
-//            for (Email email : deletedEmails) {
-//                System.out.println(email);
-//            }
-//        }
-//    }
-
     public void restoreEmail(String userEmail) {
         System.out.print("Enter email code to restore: ");
         String code = scanner.nextLine().trim();
